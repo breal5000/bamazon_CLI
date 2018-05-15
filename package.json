@@ -1,0 +1,21 @@
+{
+  "name": "bamazon_cli",
+  "version": "1.0.0",
+  "description": "mysql",
+  "main": "bamazonCustomer.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breal5000/bamazon_CLI.git"
+  },
+  "author": "brandon frazier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/breal5000/bamazon_CLI/issues"
+  },
+  "homepage": "https://github.com/breal5000/bamazon_CLI#readme"
+}
