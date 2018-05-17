@@ -80,15 +80,12 @@ function promptUserPurchase() {
 
 						console.log('Your oder has been placed! Your total is $' + productData.price * quantity);
 						console.log('Thank you for shopping with us!');
-						console.log("\n---------------------------------------------------------------------\n");
 
-						
 						connection.end();
 					})
 				} else {
 					console.log('Sorry, there is not enough product in stock,');
 					console.log('Please change your order.');
-					console.log("\n---------------------------------------------------------------------\n");
 
 					displayInventory();
 				}
@@ -107,7 +104,7 @@ function displayInventory() {
 		if (err) throw err;
 
 		console.log('Existing Inventory: ');
-		console.log('...................\n');
+		console.log('-\n');
 
 		var strOut = '';
 		for (var i = 0; i < data.length; i++) {
@@ -120,7 +117,7 @@ function displayInventory() {
 			console.log(strOut);
 		}
 
-	  	console.log("---------------------------------------------------------------------\n");
+	  	console.log("-\n");
 
 	  	promptUserPurchase();
 	})
