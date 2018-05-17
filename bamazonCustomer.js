@@ -68,7 +68,7 @@ function promptUserPurchase() {
 
 				
 				if (quantity <= productData.stock) {
-					console.log('The product you requested is in stock. Placing order');
+					console.log('The product you requested is in stock.');
 
 					// updating query string
 					var updateQueryStr = 'UPDATE products SET stock = ' + (productData.stock - quantity) + ' WHERE id = ' + item;
