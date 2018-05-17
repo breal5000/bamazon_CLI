@@ -1,27 +1,23 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 //var Table = require('cli-table');
-// create the connection information for the sql database
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
 
-  // Your username
   user: "root",
 
-  // Your password
+
   password: "",
   database: "bamazon_db"
 });
 
-// connect to the mysql server and sql database
 connection.connect(function(err) {
   if (err) throw err;
-  // run the start function after the connection is made to prompt the user
   console.log("bamazon is running");
   
 });
-// validateInput makes sure that the user is supplying only positive integers for their inputs
+
 function validateInput(value) {
 	var integer = Number.isInteger(parseFloat(value));
 	var sign = Math.sign(value);
@@ -29,44 +25,39 @@ function validateInput(value) {
 	if (integer && (sign === 1)) {
 		return true;
 	} else {
-		return 'Please enter a whole non-zero number.';
+		return 'Please enter a number.';
 	}
 }
 
-// promptUserPurchase will prompt the user for the item/quantity they would like to purchase
-function promptUserPurchase() {
-	// console.log('___ENTER promptUserPurchase___');
 
-	// Prompt the user to select an item
+function promptUserPurchase() {
+	
 	inquirer.prompt([
 		{
 			type: 'input',
-			name: 'item_id',
-			message: 'Please enter the Item ID which you want to buy',
+			name: 'id',
+			message: 'Please enter the ID of the item you want to buy',
 			validate: validateInput,
 			filter: Number
 		},
 		{
 			type: 'input',
 			name: 'quantity',
-			message: 'How many do you need?',
+			message: 'How many?',
 			validate: validateInput,
 			filter: Number
 		}
 	]).then(function(input) {
-		// console.log('Customer has selected: \n    item_id = '  + input.item_id + '\n    quantity = ' + input.quantity);
+		
 
 		var item = input.id;
 		var quantity = input.quantity;
-
-		// Query db to confirm that the given item ID exists in the desired quantity
 		var queryStr = 'SELECT * FROM products WHERE ?';
 
 		connection.query(queryStr, {id: item}, function(err, data) {
 			if (err) throw err;
 
-			// If the user has selected an invalid item ID, data attay will be empty
-			// console.log('data = ' + JSON.stringify(data));
+			;
 
 			if (data.length === 0) {
 				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.');
@@ -75,16 +66,13 @@ function promptUserPurchase() {
 			} else {
 				var productData = data[0];
 
-				// console.log('productData = ' + JSON.stringify(productData));
-				// console.log('productData.stock_quantity = ' + productData.stock_quantity);
-
-				// If the quantity requested by the user is in stock
+				
 				if (quantity <= productData.stock) {
-					console.log('Congratulations, the product you requested is in stock! Placing order!');
+					console.log('The product you requested is in stock. Placing order');
 
-					// Construct the updating query string
-					var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock - quantity) + ' WHERE item_id = ' + item;
-					// console.log('updateQueryStr = ' + updateQueryStr);
+					// updating query string
+					var updateQueryStr = 'UPDATE products SET stock = ' + (productData.stock - quantity) + ' WHERE id = ' + item;
+					
 
 					// Update the inventory
 					connection.query(updateQueryStr, function(err, data) {
@@ -94,7 +82,7 @@ function promptUserPurchase() {
 						console.log('Thank you for shopping with us!');
 						console.log("\n---------------------------------------------------------------------\n");
 
-						// End the database connection
+						
 						connection.end();
 					})
 				} else {
@@ -109,14 +97,12 @@ function promptUserPurchase() {
 	})
 }
 
-// displayInventory will retrieve the current inventory from the database and output it to the console
-function displayInventory() {
-	// console.log('___ENTER displayInventory___');
 
-	// Construct the db query string
+function displayInventory() {
+	
 	queryStr = 'SELECT * FROM products';
 
-	// Make the db query
+	// db query
 	connection.query(queryStr, function(err, data) {
 		if (err) throw err;
 
@@ -136,18 +122,13 @@ function displayInventory() {
 
 	  	console.log("---------------------------------------------------------------------\n");
 
-	  	//Prompt the user for item/quantity they would like to purchase
 	  	promptUserPurchase();
 	})
 }
 
-// runBamazon will execute the main application logic
 function runBamazon() {
-	// console.log('___ENTER runBamazon___');
 
-	// Display the available inventory
 	displayInventory();
 }
 
-// Run the application logic
 runBamazon();
